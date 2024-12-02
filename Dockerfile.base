@@ -1,0 +1,94 @@
+# Use uma imagem base Node.js compatível
+FROM node:20-slim AS builder
+
+# maintainer (docker push aristofanio/evolution-node-base:0.0.6)
+LABEL version="0.0.7" description="Node base image with some tools to Evolution." 
+LABEL maintainer="Toukio Team" git="https://github.com/toukio"
+LABEL contact="contato@ms.touk.io"
+LABEL name="aristofanio/evolution-node-base" 
+
+# Instalar dependências necessárias
+RUN apt-get update \
+    && apt-get install -y jq dos2unix \
+    && apt-get install -y git ffmpeg wget curl bash \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instalar dotenv
+RUN npm install -g dotenv
+RUN npm install -g tsx
+RUN npm install -g typescript
+
+# Definir todas as variáveis de ambiente do .env original
+# Ex.: DATABASE_URL=postgresql://utk:utkpass@host.docker.internal:5432/evolution?schema=public
+ENV TZ=America/Sao_Paulo
+ENV DOCKER_ENV=false
+ENV DOMAIN=localhost
+ENV SERVER_TYPE=http
+ENV SERVER_PORT=8080
+ENV SERVER_URL=http://${DOMAIN}:8080
+ENV SENTRY_DSN=
+ENV CORS_ORIGIN=*
+ENV CORS_METHODS=GET,POST,PUT,DELETE
+ENV CORS_CREDENTIALS=true
+ENV LOG_LEVEL=ERROR,WARN,DEBUG,INFO,LOG,VERBOSE,DARK,WEBHOOKS,WEBSOCKET
+ENV LOG_COLOR=true
+ENV LOG_BAILEYS=error
+ENV EVENT_EMITTER_MAX_LISTENERS=50
+ENV DEL_INSTANCE=false
+ENV DATABASE_ENABLED=false
+ENV DATABASE_PROVIDER=postgresql
+ENV DATABASE_CONNECTION_URI="postgresql://utk:utkpass@pg_local:5432/evolution?schema=public"
+ENV DATABASE_CONNECTION_CLIENT_NAME=evolution_exchange
+ENV DATABASE_SAVE_DATA_INSTANCE=true
+ENV DATABASE_SAVE_DATA_NEW_MESSAGE=true
+ENV DATABASE_SAVE_MESSAGE_UPDATE=true
+ENV DATABASE_SAVE_DATA_CONTACTS=true
+ENV DATABASE_SAVE_DATA_CHATS=true
+ENV DATABASE_SAVE_DATA_LABELS=true
+ENV DATABASE_SAVE_DATA_HISTORIC=true
+ENV DATABASE_SAVE_IS_ON_WHATSAPP=true
+ENV DATABASE_SAVE_IS_ON_WHATSAPP_DAYS=7
+ENV DATABASE_DELETE_MESSAGE=true
+ENV RABBITMQ_ENABLED=false
+ENV RABBITMQ_URI=amqp://localhost
+ENV RABBITMQ_EXCHANGE_NAME=evolution
+ENV RABBITMQ_GLOBAL_ENABLED=false
+ENV SQS_ENABLED=false
+ENV WEBSOCKET_ENABLED=false
+ENV PUSHER_ENABLED=false
+ENV PUSHER_GLOBAL_ENABLED=false
+ENV WA_BUSINESS_TOKEN_WEBHOOK=evolution
+ENV WA_BUSINESS_URL=https://graph.facebook.com
+ENV WA_BUSINESS_VERSION=v20.0
+ENV WA_BUSINESS_LANGUAGE=en_US
+ENV WEBHOOK_GLOBAL_ENABLED=false
+ENV WEBHOOK_GLOBAL_URL=''
+ENV WEBHOOK_GLOBAL_WEBHOOK_BY_EVENTS=false
+ENV CONFIG_SESSION_PHONE_CLIENT='Evolution API'
+ENV CONFIG_SESSION_PHONE_NAME=Chrome
+ENV CONFIG_SESSION_PHONE_VERSION=2.3000.1015901307
+ENV QRCODE_LIMIT=30
+ENV QRCODE_COLOR='#175197'
+ENV TYPEBOT_ENABLED=false
+ENV TYPEBOT_API_VERSION=latest
+ENV CHATWOOT_ENABLED=false
+ENV OPENAI_ENABLED=false
+ENV DIFY_ENABLED=false
+ENV CACHE_REDIS_ENABLED=true
+ENV CACHE_REDIS_URI='redis://localhost:6379/6'
+ENV CACHE_REDIS_TTL=604800
+ENV CACHE_REDIS_PREFIX_KEY=evolution
+ENV CACHE_REDIS_SAVE_INSTANCES=false
+ENV CACHE_LOCAL_ENABLED=false
+ENV S3_ENABLED=false
+ENV AUTHENTICATION_API_KEY=429683C4C977415CAAFCCE10F7D57E11
+ENV AUTHENTICATION_EXPOSE_IN_FETCH_INSTANCES=true
+ENV LANGUAGE=en
+      
+# Copiar todos os arquivos para o container
+WORKDIR /app
+
+# copy initial .env
+COPY ./package.json ./tsconfig.json ./
+# initial install
+RUN npm install -f

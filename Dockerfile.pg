@@ -1,0 +1,15 @@
+# Usa a imagem oficial do PostgreSQL
+FROM postgres:17.2
+
+# Define variáveis de ambiente padrão para o PostgreSQL
+ENV POSTGRES_USER=utk
+ENV POSTGRES_PASSWORD=utkpass
+ENV POSTGRES_PORT=5432
+ENV POSTGRES_HOST=localhost
+ENV POSTGRES_HOST_AUTH_METHOD=md5
+
+# Expõe a porta padrão do PostgreSQL
+EXPOSE 5432
+
+# Define um ponto de entrada que permite usar o host customizável
+CMD ["postgres"]
