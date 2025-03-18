@@ -1,5 +1,5 @@
 # Use uma imagem base Node.js compatível
-FROM aristofanio/evolution-node-base:0.0.7 AS builder
+FROM aristofanio/evolution-node-base:0.0.8-2.2.3 AS builder
 
 # maintainer
 LABEL version="2.2.3" description="Cloned Api to control whatsapp features through http requests." 
@@ -8,9 +8,6 @@ LABEL contact="contato@ms.touk.io"
 
 ENV LANGUAGE=pt-BR
 ENV NODE_TLS_REJECT_UNAUTHORIZED=0
-
-RUN apk update && \
-    apk add git ffmpeg wget curl bash openssl
 
 # Copiar todos os arquivos para o container
 COPY . /app

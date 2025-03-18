@@ -1,7 +1,7 @@
 # Use uma imagem base Node.js compatível
 FROM node:20-slim AS builder
 
-# maintainer (docker push aristofanio/evolution-node-base:0.0.6)
+# maintainer (docker push aristofanio/evolution-node-base:0.0.8-2.2.3)
 LABEL version="0.0.7" description="Node base image with some tools to Evolution." 
 LABEL maintainer="Toukio Team" git="https://github.com/toukio"
 LABEL contact="contato@ms.touk.io"
@@ -10,7 +10,7 @@ LABEL name="aristofanio/evolution-node-base"
 # Instalar dependências necessárias
 RUN apt-get update \
     && apt-get install -y jq dos2unix \
-    && apt-get install -y git ffmpeg wget curl bash \
+    && apt-get install -y git ffmpeg wget curl bash openssl \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalar dotenv
