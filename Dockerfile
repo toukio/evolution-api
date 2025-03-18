@@ -6,6 +6,9 @@ LABEL version="2.2.0" description="Cloned Api to control whatsapp features throu
 LABEL maintainer="Toukio Team" git="https://github.com/toukio"
 LABEL contact="contato@ms.touk.io"
 
+ENV LANGUAGE=pt-BR
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
+
 # Copiar todos os arquivos para o container
 COPY . /app
 WORKDIR /app
