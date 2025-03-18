@@ -2,23 +2,25 @@
 FROM aristofanio/evolution-node-base:0.0.7 AS builder
 
 # maintainer
-LABEL version="2.2.0" description="Cloned Api to control whatsapp features through http requests." 
+LABEL version="2.2.3" description="Cloned Api to control whatsapp features through http requests." 
 LABEL maintainer="Toukio Team" git="https://github.com/toukio"
 LABEL contact="contato@ms.touk.io"
 
 ENV LANGUAGE=pt-BR
 ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
+RUN apk update && \
+    apk add git ffmpeg wget curl bash openssl
+
 # Copiar todos os arquivos para o container
 COPY . /app
 WORKDIR /app
 
 # copy initial .env
-COPY .env.example /app/.env
+COPY ./.env.example /app/.env
 
 # Executar script para gerar banco de dados
-RUN chmod +x ./Docker/scripts/*
-RUN dos2unix ./Docker/scripts/*  
+RUN chmod +x ./Docker/scripts/* && dos2unix ./Docker/scripts/*  
 RUN ./Docker/scripts/generate_database.sh
 
 # Build da aplicação
